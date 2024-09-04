@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class InvoiceServiceImpl implements InvoiceService {
@@ -22,7 +23,6 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public Invoice createInvoice(Invoice invoice) {
-        // Set the invoice reference on each item
         invoice.getItems().forEach(item -> item.setInvoice(invoice));
         return invoiceRepository.save(invoice);
     }
@@ -36,7 +36,37 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public void removeInvoice(int id) {
-        invoiceRepository.deleteById(id);
+    public List<Invoice> getNonArchivedInvoices() {
+        return invoiceRepository.findByArchivedFalse();
+    }
+
+    @Override
+    public void deleteInvoiceById(int id) {
+        if(invoiceRepository.existsById(id)) {
+            invoiceRepository.deleteById(id);
+        }else {
+            throw new IllegalArgumentException("Invoice with id " + id + " does not exist");
+        }
+
+    }
+
+    @Override
+    public void archiveInvoiceById(int id) {
+        if(invoiceRepository.existsById(id)){
+            Invoice invoice = invoiceRepository.findById(id).get();
+            invoice.setArchived(true);
+            invoiceRepository.save(invoice);
+        }else {
+            throw new IllegalArgumentException("Invoice with id " + id + " does not exist");
+        }
+    }
+
+    @Override
+    public Optional<Invoice> getInvoiceById(int id) {
+        if(invoiceRepository.existsById(id)){
+            return invoiceRepository.findById(id);
+        }else {
+            return Optional.empty();
+        }
     }
 }

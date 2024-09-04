@@ -8,10 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
-@RequestMapping("invoice")
+@RequestMapping("invoices")
 public class InvoiceController {
 
     @Autowired
@@ -29,11 +30,36 @@ public class InvoiceController {
         return ResponseEntity.ok(invoices);
     }
 
-    @DeleteMapping("/{id}")
-    public String deleteInvoice(@PathVariable int id) {
-        invoiceService.removeInvoice(id);
-
-        return "Invoice deleted!";
+    @GetMapping("/non-archived")
+    public ResponseEntity<List<Invoice>> getNonArchivedInvoices() {
+        List<Invoice> invoices = invoiceService.getNonArchivedInvoices();
+        return ResponseEntity.ok(invoices);
     }
+
+    @GetMapping("/{id}")
+   public ResponseEntity<Optional<Invoice>> getInvoiceById(@PathVariable int id) {
+       if (invoiceService.getInvoiceById(id).isPresent()) {
+           return ResponseEntity.ok(invoiceService.getInvoiceById(id));
+       } else {
+           return ResponseEntity.notFound().build();
+       }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteInvoice(@PathVariable int id) {
+        invoiceService.deleteInvoiceById(id);
+        return ResponseEntity.ok("Invoice with id " + id + " has been deleted");
+    }
+
+    @PutMapping("/{id}/archive")
+    public ResponseEntity<String> archiveInvoice(@PathVariable int id) {
+        try{
+        invoiceService.archiveInvoiceById(id);
+        return ResponseEntity.ok("Invoice with id " + id + " has been archived");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 }

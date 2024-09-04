@@ -2,6 +2,7 @@ package com.tericcabrel.authapi.configs;
 
 import com.tericcabrel.authapi.cookie.CustomCsrfFilter;
 import com.tericcabrel.authapi.cookie.CustomCsrfTokenRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -22,8 +23,10 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
+    @Autowired
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    @Autowired
     private final CustomCsrfFilter customCsrfFilter;
 
     public SecurityConfiguration(
@@ -43,7 +46,13 @@ public class SecurityConfiguration {
                         .csrfTokenRepository(customCsrfTokenRepository()))
 
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/auth/**","/auth/signup","/user/add-profile","/user/image/{uuid}", "/user/image/profileId","/user/image/upload","/invoice/**")
+                        .requestMatchers("/auth/**",
+                                "/auth/signup",
+                                "/user/add-profile",
+                                "/user/image/{uuid}",
+                                "/user/image/profileId",
+                                "/user/image/upload",
+                                "/invoices/**")
                         .permitAll()
                         .requestMatchers("/user/profile/**").authenticated()
                         .anyRequest().authenticated())

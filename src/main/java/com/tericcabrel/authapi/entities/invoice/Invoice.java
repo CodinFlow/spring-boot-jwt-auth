@@ -34,6 +34,10 @@ public class Invoice {
     @JsonFormat(pattern="dd.MM.yyyy", timezone="Europe/Zagreb")
     private LocalDate date;
     private String payment;
+
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.PENDING;
+    private boolean archived;
     @JsonFormat(pattern="dd.MM.yyyy", timezone="Europe/Zagreb")
     private LocalDate dueDate;
     private String poNumber;
