@@ -1,6 +1,7 @@
 package com.tericcabrel.authapi.services.serviceImpl;
 
 import com.tericcabrel.authapi.entities.invoice.Invoice;
+import com.tericcabrel.authapi.entities.invoice.Status;
 import com.tericcabrel.authapi.repositories.invoice.InvoiceRepository;
 import com.tericcabrel.authapi.repositories.invoice.ItemRepository;
 import com.tericcabrel.authapi.services.serviceInterface.InvoiceService;
@@ -42,9 +43,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public void deleteInvoiceById(int id) {
-        if(invoiceRepository.existsById(id)) {
+        if (invoiceRepository.existsById(id)) {
             invoiceRepository.deleteById(id);
-        }else {
+        } else {
             throw new IllegalArgumentException("Invoice with id " + id + " does not exist");
         }
 
@@ -52,20 +53,31 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public void archiveInvoiceById(int id) {
-        if(invoiceRepository.existsById(id)){
+        if (invoiceRepository.existsById(id)) {
             Invoice invoice = invoiceRepository.findById(id).get();
             invoice.setArchived(true);
             invoiceRepository.save(invoice);
-        }else {
+        } else {
+            throw new IllegalArgumentException("Invoice with id " + id + " does not exist");
+        }
+    }
+
+    @Override
+    public void markAsPaid(int id) {
+        if (invoiceRepository.existsById(id)) {
+            Invoice invoice = invoiceRepository.findById(id).get();
+            invoice.setStatus(Status.PAYED);
+            invoiceRepository.save(invoice);
+        } else {
             throw new IllegalArgumentException("Invoice with id " + id + " does not exist");
         }
     }
 
     @Override
     public Optional<Invoice> getInvoiceById(int id) {
-        if(invoiceRepository.existsById(id)){
+        if (invoiceRepository.existsById(id)) {
             return invoiceRepository.findById(id);
-        }else {
+        } else {
             return Optional.empty();
         }
     }

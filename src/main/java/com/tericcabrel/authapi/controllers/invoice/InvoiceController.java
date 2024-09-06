@@ -61,5 +61,16 @@ public class InvoiceController {
         }
     }
 
+    @PutMapping("/{id}/mark-as-paid")
+    public ResponseEntity<String> markAsPaid(@PathVariable int id) {
+        try{
+        invoiceService.markAsPaid(id);
+        return ResponseEntity.ok("Invoice with id " + id + " has been marked as paid");
+        } catch (IllegalArgumentException e) {
+
+            return e.getMessage().contains("Invoice with id") ? ResponseEntity.notFound().build() : ResponseEntity.badRequest().build();
+        }
+    }
+
 
 }

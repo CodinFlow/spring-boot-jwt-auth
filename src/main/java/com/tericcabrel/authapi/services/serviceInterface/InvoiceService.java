@@ -13,5 +13,6 @@ public interface InvoiceService {
     List<Invoice> getNonArchivedInvoices();
     void deleteInvoiceById(int id);
     void archiveInvoiceById(int id);
+    void markAsPaid(int id);
     Optional<Invoice> getInvoiceById(int id);
 }
