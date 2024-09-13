@@ -51,19 +51,35 @@ public class ReportController {
         return reportService.saveReport(report);
     }
 
-   @DeleteMapping("/{id}")
-   public ResponseEntity<Void> deleteReportById(@PathVariable Long id, @RequestHeader("Authorization") String token) {
+   @PutMapping("/{id}")
+   public ResponseEntity<Void> archieveReportById(@PathVariable Long id, @RequestHeader("Authorization") String token) {
        // Remove "Bearer " from token
        String jwt = token.substring(7);
        String username = jwtService.extractUsername(jwt);
 
        Optional<Report> report = Optional.ofNullable(reportService.getReportByIdAndUsername(id, username));
        if (report.isPresent()) {
-           reportService.deleteReportByIdAndUsername(id, username);
+           reportService.archieveReportByIdAndUsername(id, username);
            return ResponseEntity.ok().build();
        } else {
            return ResponseEntity.status(403).build();
        }
    }
+
+   @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteReportById(@PathVariable Long id, @RequestHeader("Authorization") String token) {
+        // Remove "Bearer " from token
+        String jwt = token.substring(7);
+        String username = jwtService.extractUsername(jwt);
+
+        Optional<Report> report = Optional.ofNullable(reportService.getReportByIdAndUsername(id, username));
+        if (report.isPresent()) {
+            reportService.deleteReportByIdAndUsername(id, username);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(403).build();
+        }
+    }
+
 
 }

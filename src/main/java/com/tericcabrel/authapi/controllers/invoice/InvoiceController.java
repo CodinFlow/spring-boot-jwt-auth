@@ -15,6 +15,7 @@ import java.util.Optional;
 @RequestMapping("invoices")
 public class InvoiceController {
 
+
     @Autowired
     private InvoiceServiceImpl invoiceService;
 
@@ -72,5 +73,19 @@ public class InvoiceController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateInvoice(@PathVariable int id, @RequestBody Invoice invoice) {
+
+        if (invoiceService.getInvoiceById(id).isPresent()) {
+            invoice.setId(id);
+            invoiceService.updateInvoice(id, invoice);
+            return ResponseEntity.ok("Invoice with id " + id + " has been updated");
+        } else {
+            return ResponseEntity.notFound().build();
+
+
+
+        }
+    }
 
 }

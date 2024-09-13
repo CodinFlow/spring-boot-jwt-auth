@@ -60,7 +60,7 @@ public class ReportService {
     }
 
     @Transactional
-    public void deleteReportByIdAndUsername(Long id, String username) {
+    public void archieveReportByIdAndUsername(Long id, String username) {
         Report report =  reportRepository.findByIdAndUsername(id,username).orElse(null);
         if (report != null ) {
             report.setArchived(true);
@@ -69,7 +69,16 @@ public class ReportService {
     }
 
 
+
+
     public void removeAllReport () {
         reportRepository.deleteAll();
+    }
+
+    public void deleteReportByIdAndUsername(Long id, String username) {
+        Report report =  reportRepository.findByIdAndUsername(id,username).orElse(null);
+        if (report != null) {
+            reportRepository.delete(report);
+        }
     }
 }

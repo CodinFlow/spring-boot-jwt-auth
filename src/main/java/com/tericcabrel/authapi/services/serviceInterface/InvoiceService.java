@@ -15,4 +15,5 @@ public interface InvoiceService {
     void archiveInvoiceById(int id);
     void markAsPaid(int id);
     Optional<Invoice> getInvoiceById(int id);
+    void updateInvoice(int id, Invoice invoice);
 }
