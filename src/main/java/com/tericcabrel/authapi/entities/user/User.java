@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-@Table(name = "USERS_TB")
+@Table(name = "USERS")
 @Entity
 public class User implements UserDetails {
     @Id
@@ -20,8 +20,17 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private Integer user_id;
 
+    @Getter
     @Column(nullable = false)
-    private String fullName;
+    private String firstname;
+
+    @Getter
+    @Column(nullable = false)
+    private String lastname;
+
+    @Getter
+    @Column(nullable = false)
+    private String address;
 
     @Getter
     @Column(unique = true, length = 100, nullable = false)
@@ -70,8 +79,17 @@ public class User implements UserDetails {
     }
 
 
-    public User setFullName(String fullName) {
-        this.fullName = fullName;
+    public User setFirstname(String firstName) {
+        this.firstname = firstName;
+        return this;
+    }
+    public User setLastname(String lastName) {
+        this.lastname = lastName;
+        return this;
+    }
+
+    public User setAddress(String address) {
+        this.address = address;
         return this;
     }
 
@@ -89,7 +107,9 @@ public class User implements UserDetails {
     public String toString() {
         return "User{" +
                 "id=" + user_id +
-                ", fullName='" + fullName + '\'' +
+                ", firstName='" + firstname + '\'' +
+                ", lastName='" + lastname + '\'' +
+                ", address='" + address + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", createdAt=" + createdAt +

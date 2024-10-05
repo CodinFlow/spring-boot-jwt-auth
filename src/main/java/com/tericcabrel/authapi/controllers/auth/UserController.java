@@ -1,14 +1,13 @@
-package com.tericcabrel.authapi.controllers;
+package com.tericcabrel.authapi.controllers.auth;
 
 import com.tericcabrel.authapi.entities.user.User;
+import com.tericcabrel.authapi.services.JwtService;
 import com.tericcabrel.authapi.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,6 +17,9 @@ import java.util.List;
 @RestController
 public class UserController {
     private final UserService userService;
+
+    @Autowired
+    private JwtService jwtService;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -37,5 +39,15 @@ public class UserController {
         List <User> users = userService.allUsers();
 
         return ResponseEntity.ok(users);
+    }
+
+    //TODO: Implement the delete user endpoint (SETTINGS ENTITY)
+    @GetMapping("/delete")
+    public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String token) {
+        String jwt = token.substring(7);
+        String username = jwtService.extractUsername(jwt);
+        userService.deleteUserAccount(username);
+        return ResponseEntity.ok("User deleted successfully");
+
     }
 }

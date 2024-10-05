@@ -10,10 +10,10 @@ public interface InvoiceService {
 
     Invoice createInvoice(Invoice invoice);
     List<Invoice> getAllInvoices();
-    List<Invoice> getNonArchivedInvoices();
+    List<Invoice> getNonArchivedInvoices(String username);
     void deleteInvoiceById(int id);
     void archiveInvoiceById(int id);
     void markAsPaid(int id);
     Optional<Invoice> getInvoiceById(int id);
-    void updateInvoice(int id, Invoice invoice);
+    void updateInvoiceById(int id, Invoice invoice);
 }

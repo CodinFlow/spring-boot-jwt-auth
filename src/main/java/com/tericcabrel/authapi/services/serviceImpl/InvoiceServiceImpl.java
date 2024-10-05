@@ -43,8 +43,8 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public List<Invoice> getNonArchivedInvoices() {
-        return invoiceRepository.findByArchivedFalse();
+    public List<Invoice> getNonArchivedInvoices(String username) {
+        return invoiceRepository.findByUsernameAndArchivedFalse(username);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public void updateInvoice(int id, Invoice invoice) {
+    public void updateInvoiceById(int id, Invoice invoice) {
         Invoice existingInvoice = invoiceRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invoice with id " + id + " does not exist"));
         if (existingInvoice.getStatus() == Status.PAYED) {
@@ -99,7 +99,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setId(id);
         invoice.getItems().forEach(item -> item.setInvoice(invoice));
         invoiceRepository.save(invoice);
-
-
     }
+
+
 }

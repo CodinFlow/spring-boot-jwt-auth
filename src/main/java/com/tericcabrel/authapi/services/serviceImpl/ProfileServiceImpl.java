@@ -49,8 +49,8 @@ public class ProfileServiceImpl implements ProfileService {
                 new IllegalArgumentException("Profile not found for the currently authenticated user"));
 
         // Update profile details
-        updatedProfile.setFirst_name(profile.getFirst_name());
-        updatedProfile.setLast_name(profile.getLast_name());
+        updatedProfile.setFirstname(profile.getFirstname());
+        updatedProfile.setLastname(profile.getLastname());
         updatedProfile.setPhone(profile.getPhone());
         updatedProfile.setAddress(profile.getAddress());
         updatedProfile.setBio(profile.getBio());

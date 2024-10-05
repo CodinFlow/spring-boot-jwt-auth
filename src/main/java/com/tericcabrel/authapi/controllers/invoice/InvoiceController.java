@@ -2,6 +2,7 @@ package com.tericcabrel.authapi.controllers.invoice;
 
 
 import com.tericcabrel.authapi.entities.invoice.Invoice;
+import com.tericcabrel.authapi.services.JwtService;
 import com.tericcabrel.authapi.services.serviceImpl.InvoiceServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,9 @@ public class InvoiceController {
     @Autowired
     private InvoiceServiceImpl invoiceService;
 
+    @Autowired
+    private JwtService jwtService;
+
     @PostMapping
     public ResponseEntity<Invoice> createInvoice(@RequestBody Invoice invoice) {
         Invoice savedInvoice = invoiceService.createInvoice(invoice);
@@ -32,8 +36,10 @@ public class InvoiceController {
     }
 
     @GetMapping("/non-archived")
-    public ResponseEntity<List<Invoice>> getNonArchivedInvoices() {
-        List<Invoice> invoices = invoiceService.getNonArchivedInvoices();
+    public ResponseEntity<List<Invoice>> getNonArchivedInvoices(@RequestHeader("Authorization") String token) {
+        String jwt = token.substring(7);
+        String username = jwtService.extractUsername(jwt);
+        List<Invoice> invoices = invoiceService.getNonArchivedInvoices(username);
         return ResponseEntity.ok(invoices);
     }
 
@@ -78,7 +84,7 @@ public class InvoiceController {
 
         if (invoiceService.getInvoiceById(id).isPresent()) {
             invoice.setId(id);
-            invoiceService.updateInvoice(id, invoice);
+            invoiceService.updateInvoiceById(id, invoice);
             return ResponseEntity.ok("Invoice with id " + id + " has been updated");
         } else {
             return ResponseEntity.notFound().build();

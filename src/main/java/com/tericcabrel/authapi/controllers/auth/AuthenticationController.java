@@ -1,8 +1,8 @@
-package com.tericcabrel.authapi.controllers;
+package com.tericcabrel.authapi.controllers.auth;
 
-import com.tericcabrel.authapi.entities.user.User;
 import com.tericcabrel.authapi.dtos.LoginUserDto;
-import com.tericcabrel.authapi.dtos.RegisterUserDto;
+import com.tericcabrel.authapi.dtos.SignupUserDto;
+import com.tericcabrel.authapi.entities.user.User;
 import com.tericcabrel.authapi.responses.LoginResponse;
 import com.tericcabrel.authapi.services.AuthenticationService;
 import com.tericcabrel.authapi.services.JwtService;
@@ -27,10 +27,9 @@ public class AuthenticationController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<User> register(@Valid @RequestBody RegisterUserDto registerUserDto) {
-        User registeredUser = authenticationService.signup(registerUserDto);
-
-        return ResponseEntity.ok(registeredUser);
+    public ResponseEntity<?> register(@Valid @RequestBody SignupUserDto registerUserDto) {
+        authenticationService.signup(registerUserDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
     }
 
     @PostMapping("/login")

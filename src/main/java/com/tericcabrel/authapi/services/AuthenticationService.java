@@ -1,7 +1,7 @@
 package com.tericcabrel.authapi.services;
 
 import com.tericcabrel.authapi.dtos.LoginUserDto;
-import com.tericcabrel.authapi.dtos.RegisterUserDto;
+import com.tericcabrel.authapi.dtos.SignupUserDto;
 import com.tericcabrel.authapi.entities.user.User;
 import com.tericcabrel.authapi.exceptions.DuplicateUsernameException;
 import com.tericcabrel.authapi.repositories.UserRepository;
@@ -33,12 +33,15 @@ public class AuthenticationService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User signup(@Valid @RequestBody RegisterUserDto input) {
+    public User signup(@Valid @RequestBody SignupUserDto input) {
         if (userRepository.existsByEmail(input.getEmail())) {
             throw new DuplicateUsernameException("Email already exists");
         }
+
         var user = new User()
-                .setFullName(input.getFullName())
+                .setFirstname(input.getFirstname())
+                .setLastname(input.getLastname())
+                .setAddress(input.getAddress())
                 .setEmail(input.getEmail())
                 .setPassword(passwordEncoder.encode(input.getPassword()));
 
@@ -58,9 +61,7 @@ public class AuthenticationService {
 
     public List<User> allUsers() {
         List<User> users = new ArrayList<>();
-
         userRepository.findAll().forEach(users::add);
-
         return users;
     }
 
@@ -70,4 +71,5 @@ public class AuthenticationService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList<>());
     }
+
 }

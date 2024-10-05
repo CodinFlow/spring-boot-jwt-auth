@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name="invoice")
+@Table(name = "invoice")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -26,19 +26,20 @@ public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
+    private int user_id;
+    private String username;
     private String invoiceFrom;
     private String billTo;
     private String shipTo;
     private String invoiceNumber;
-    @JsonFormat(pattern="dd.MM.yyyy", timezone="Europe/Zagreb")
+    @JsonFormat(pattern = "dd.MM.yyyy", timezone = "Europe/Zagreb")
     private LocalDate date;
     private String payment;
 
     @Enumerated(EnumType.STRING)
     private Status status = Status.PENDING;
     private boolean archived;
-    @JsonFormat(pattern="dd.MM.yyyy", timezone="Europe/Zagreb")
+    @JsonFormat(pattern = "dd.MM.yyyy", timezone = "Europe/Zagreb")
     private LocalDate dueDate;
     private String poNumber;
     private String notes;
@@ -55,11 +56,11 @@ public class Invoice {
 
 
     @CreationTimestamp
-    @JsonFormat(pattern="dd.MM.yyyy HH:mm", timezone="Europe/Zagreb")
+    @JsonFormat(pattern = "dd.MM.yyyy HH:mm", timezone = "Europe/Zagreb")
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @JsonFormat(pattern="dd.MM.yyyy HH:mm", timezone="Europe/Zagreb")
+    @JsonFormat(pattern = "dd.MM.yyyy HH:mm", timezone = "Europe/Zagreb")
     private LocalDateTime updatedAt;
 
 }

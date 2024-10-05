@@ -28,7 +28,7 @@ public class ProfileController {
     @PostMapping("/add-profile")
     public String add(@RequestBody Profile profile) {
         profileService.saveProfile(profile);
-        return "New User with the name "+ profile.getFirst_name() + " has been added!"  ;
+        return "New User with the name "+ profile.getFirstname() + " has been added!"  ;
     }
 
     @PutMapping("/profile-edit")

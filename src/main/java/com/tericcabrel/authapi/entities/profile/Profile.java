@@ -17,7 +17,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "PROFILE_TB")
+@Table(name = "PROFILE")
 @Entity
 public class Profile {
 
@@ -26,8 +26,8 @@ public class Profile {
     @Column(nullable = false)
     private Integer profile_id;
 
-    private String first_name;
-    private String last_name;
+    private String firstname;
+    private String lastname;
     private String email;
     private String phone;
     private String mobile;
