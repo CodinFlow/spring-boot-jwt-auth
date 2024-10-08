@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -41,21 +40,37 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                /*.cors(withDefaults())
+                .csrf(csrf -> csrf
+                        .csrfTokenRepository(customCsrfTokenRepository()))*/
+
+                // Disable CSRF for Swagger access (optional, only if necessary)
                 .cors(withDefaults())
                 .csrf(csrf -> csrf
-                        .csrfTokenRepository(customCsrfTokenRepository()))
+                        .disable())
 
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/auth/**",
+                        .requestMatchers(
+                                "/auth/**",
                                 "/auth/signup",
                                 "/user/add-profile",
                                 "/user/image/{uuid}",
                                 "/user/image/profileId",
                                 "/user/image/upload",
-                                "/invoices/**")
-                        .permitAll()
-                        .requestMatchers("/user/profile/**").authenticated()
+                                "/invoices/**",
+                                "/api/v1/clients/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html",
+                                "/api-docs",
+                                "swagger-ui/index.html"
+                        ).permitAll()
+
+
+
                         .anyRequest().authenticated())
+
+                // Add JWT authentication filter before UsernamePasswordAuthenticationFilter
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -66,12 +81,14 @@ public class SecurityConfiguration {
         return new CustomCsrfTokenRepository(); // Use the custom repository
     }
 
-
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173","https://web-application-development7405251-317d6980115c9bfc5d610a5bb25d.gitlab.io/"));
+        configuration.setAllowedOrigins(Arrays.asList(
+                "http://localhost:5173",
+                "http://localhost:8080",
+                "https://web-application-development7405251-317d6980115c9bfc5d610a5bb25d.gitlab.io/"
+        ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
@@ -80,5 +97,4 @@ public class SecurityConfiguration {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
 }
