@@ -2,7 +2,6 @@
 package com.tericcabrel.authapi.entities.user;
 
 import jakarta.persistence.*;
-import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,23 +19,37 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private Integer user_id;
 
-    @Getter
     @Column(nullable = false)
     private String firstname;
 
-    @Getter
     @Column(nullable = false)
     private String lastname;
 
-    @Getter
+
+
+    public String getEmail() {
+        return email;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
     @Column(nullable = false)
     private String address;
 
-    @Getter
     @Column(unique = true, length = 100, nullable = false)
     private String email;
 
-    @Getter
     @Column(nullable = false)
     private String password;
 

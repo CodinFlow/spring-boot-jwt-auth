@@ -1,0 +1,28 @@
+version: '3.8'  # Specify the Docker Compose file format version
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: root          # Set the MySQL root password
+      MYSQL_DATABASE: mysql_database      # Create a database named mysql_database
+    ports:
+      - "3307:3306"                       # Expose MySQL port
+    volumes:
+      - mysql_data:/var/lib/mysql         # Persist MySQL data
+
+  auth-api:
+    image: auth-api                       # Use the name of your built Spring Boot image
+    container_name: auth-api-container
+    depends_on:
+      - mysql                              # Ensure MySQL starts before the Spring Boot app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3307/mysql_database  # JDBC URL for MySQL
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    ports:
+      - "8080:8080"                       # Expose Spring Boot app port
+
+volumes:
+  mysql_data:                              # Define a volume to persist MySQL data

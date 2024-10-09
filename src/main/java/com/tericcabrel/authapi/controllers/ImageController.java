@@ -1,24 +1,27 @@
 package com.tericcabrel.authapi.controllers;
 
 import com.tericcabrel.authapi.services.ImageService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 
 import java.io.IOException;
 import java.util.UUID;
+
+import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 @CrossOrigin
 @RestController
 @RequestMapping("/user/image")
-@RequiredArgsConstructor
+
 public class ImageController {
 
     private final ImageService imageService;
+
+    public ImageController(ImageService imageService) {
+        this.imageService = imageService;
+    }
 
     /*@PostMapping("/upload")
     public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile file) throws IOException {

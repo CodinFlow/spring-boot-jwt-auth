@@ -58,5 +58,16 @@ public class ClientController {
        }
     }
 
+    @PutMapping("/{id}/archive")
+    public ResponseEntity<String> archiveClient(@PathVariable int id) {
+       if(clientService.getClientById(id).isPresent()) {
+           clientService.archiveClientById(id);
+           return ResponseEntity.ok("Client archived successfully");
+       } else {
+           return ResponseEntity.notFound().build();
+       }
+    }
+
+
 
 }

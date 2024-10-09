@@ -40,7 +40,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                /*.cors(withDefaults())
+               /* .cors(withDefaults())
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(customCsrfTokenRepository()))*/
 

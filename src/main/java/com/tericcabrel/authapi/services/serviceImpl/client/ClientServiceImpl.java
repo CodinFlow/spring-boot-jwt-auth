@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -61,6 +62,21 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<Client> getAllClients() {
-        return (List<Client>) clientRepository.findAll();
+       List<Client> clients = (List<Client>) clientRepository.findAll();
+       return clients.stream().filter(client -> !client.isArchived())
+               .collect(Collectors.toList());
+    }
+
+    @Override
+    public void archiveClientById(int id) {
+        if(clientRepository.existsById(id)) {
+            Client existingClient = clientRepository.findById(id).get();
+
+            existingClient.setArchived(true);
+
+            clientRepository.save(existingClient);
+        } else {
+            throw new IllegalArgumentException("Client with id " + id + " does not exist");
+        }
     }
 }

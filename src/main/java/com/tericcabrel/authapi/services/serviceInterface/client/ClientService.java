@@ -15,4 +15,5 @@ public interface ClientService {
     Optional<Client> getClientById(int id);
 
     List<Client> getAllClients();
+    void archiveClientById(int id);
 }
